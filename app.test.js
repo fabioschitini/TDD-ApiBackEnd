@@ -3,19 +3,19 @@ const app=require('./app')
 
 
 const allGames = [
-    { id: 1, title: 'Elden Ring' }, 
-    { id: 2, title: 'Dark Souls' }, 
-    { id: 3, title: 'Blodborne' }
+    { id: '1', title: 'Elden Ring' }, 
+    { id: '2', title: 'Dark Souls' }, 
+    { id: '3', title: 'Blodborne' }
   ];
   
   const users=[
-    {id:1,username:'user1',password:'senha'},
-    {id:2,username:'user2',password:'senha'},
-    {id:3,username:'user3',password:'senha'}
+    {id:'1',username:'user1',password:'senha'},
+    {id:'2',username:'user2',password:'senha'},
+    {id:'3',username:'user3',password:'senha'}
   
   ]
 
-  it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
+it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
     const response=await request(app)
     .post('/login')
     .send({
@@ -67,6 +67,17 @@ it('GET /games return array with object with all games',async()=>{
  
 })
 
+it('GET /games/id return game object when give especific id',async()=>{
+    const response=await request(app)
+    .get('/games/id')
+    .query({ id: '1' })
+    .expect("Content-Type",/json/)
+    .expect(200)
+
+ expect(response.body).toEqual({ id: '1', title: 'Elden Ring' })
+ 
+})
+
 it('POST /games,add new game object on the allGames array,then return array with object with all games',async()=>{
     const response=await request(app)
     .post('/games')
@@ -84,6 +95,38 @@ it('POST /games,add new game object on the allGames array,then return array with
         })
     ])
  )
+})
+
+it('PUT /game, update the details of the game',async()=>{
+    const response=await request(app)
+    .put('/game')
+    .query({ id: '4' })
+    .send({
+        title:'Divinity',
+        id:'4'
+    })
+    .expect("Content-Type",/json/)
+    .expect(200)
+ expect(response.body).toEqual( expect.arrayContaining([
+    expect.objectContaining({
+        title:'Divinity',
+        id:'4'
+    })
+]))
+})
+
+it('DELETE /game, delete especified game',async()=>{
+    const response=await request(app)
+    .delete('/games')
+    .query({ id: '4' })
+    .expect("Content-Type",/json/)
+    .expect(200)
+ expect(response.body).not.toEqual( expect.arrayContaining([
+    expect.objectContaining({
+        title:'Divinity',
+        id:'4'
+    })
+]))
 })
 
 it('POST /sigin,add the info on the users array',async()=>{
@@ -112,9 +155,7 @@ it('GET /login, retunr the user info',async()=>{
  
 })
 
-
-
-it('POST /logout,does not return the user info if you do  not have token',async()=>{
+it('POST /logout,destroying the token and loggin out',async()=>{
     const response=await request(app)
     .post('/logout')
     .expect("Content-Type",/json/)
@@ -122,7 +163,6 @@ it('POST /logout,does not return the user info if you do  not have token',async(
  expect(response.body).toEqual('Succes!')
  
 })
-
 
 it('POST /games,you cant add games because you do not have the permission to do so',async()=>{
     const response=await request(app)
@@ -136,7 +176,6 @@ it('POST /games,you cant add games because you do not have the permission to do 
     .expect(401)
  expect(response.body).toEqual({user:undefined})
 })
-
 
 it('GET /login,does not return the user info if you do  not have token',async()=>{
     const response=await request(app)
