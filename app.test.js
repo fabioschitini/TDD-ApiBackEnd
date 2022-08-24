@@ -140,8 +140,7 @@ it('POST /sigin,add the info on the users array',async()=>{
     .expect(200)
  expect(response.body).toEqual( expect.arrayContaining([
     expect.objectContaining({
-        username:'user4',
-        password:'senha'
+        username:'user4'
     })
 ]))
 })

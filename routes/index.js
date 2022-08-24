@@ -61,25 +61,32 @@ router.get('/login',authenticateToken, function(req, res, next) {
 });
 
 router.post('/login',(req,res,next)=>{
-const username=req.body.username
-const password=req.body.password
-  let userExist=false;
-  let passwordMatchs=false;
-users.map(user=>{
-if(user.username===req.body.username){
-userExist=true
-if(user.password===req.body.password){
-  passwordMatchs=true}}})
-if(!userExist)
-    return  res.status(500),res.json({ errorMessage: 'Username doesnt exist!' })
-else if(!passwordMatchs)
-  return  res.status(500),res.json({ errorMessage: 'Password doesnt match!' })
-else{
-  let expire=3600  
-  const accessToken=jwt.sign({user:{username,password}},'secreteKey',{expiresIn:`${expire}s`})
-  req.header.token=accessToken
-  return res.json({ users });
-}
+  try{
+    const username=req.body.username
+    const password=req.body.password
+      let userExist=false;
+      let passwordMatchs=false;
+    users.map(user=>{
+    if(user.username===req.body.username){
+    userExist=true
+    if(user.password===req.body.password){
+      passwordMatchs=true}}})
+    if(!userExist)
+        return  res.status(500),res.json({ errorMessage: 'Username doesnt exist!' })
+    else if(!passwordMatchs)
+      return  res.status(500),res.json({ errorMessage: 'Password doesnt match!' })
+    else{
+      let expire=3600  
+      const accessToken=jwt.sign({user:{username,password}},'secreteKey',{expiresIn:`${expire}s`})
+      req.header.token=accessToken
+      return res.json({ users });
+    }
+  }
+  catch(e){
+    console.error(e.message)
+    return  res.status(500),res.json({ errorMessage: 'Server Side Error!' })
+  }
+
 })
 
 router.post('/signin', function(req, res, next) {
