@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const jwt=require('jsonwebtoken')
+const bcrypt=require("bcryptjs")
 
 const allGames = [
   { id: '1', title: 'Elden Ring' }, 
@@ -92,10 +93,13 @@ router.post('/login',(req,res,next)=>{
 router.post('/signin', function(req, res, next) {
 
 const username=req.body.username
-const password=req.body.password
-const newUser=({username,password})
-users.push(newUser)
+bcrypt.hash(req.body.password,10,(err,hashedPassword)=>{
+  const newUser=({username,password:hashedPassword,id:'4'})
+  users.push(newUser)
   res.json( users)
+  console.log(users)
+})
+
 });
 
 router.post('/logout', function(req, res, next) {
