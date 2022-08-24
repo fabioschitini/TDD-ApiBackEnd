@@ -12,19 +12,38 @@ const allGames = [
     {id:'1',username:'user1',password:'senha'},
     {id:'2',username:'user2',password:'senha'},
     {id:'3',username:'user3',password:'senha'}
-  
   ]
+
+  it('POST /sigin,add the info on the users array',async()=>{
+    const response=await request(app)
+    .post('/signin')
+    .send({
+        username:'user4',
+        password:'senha'
+    })
+    .expect("Content-Type",/json/)
+    .expect(200)
+ expect(response.body).toEqual( expect.arrayContaining([
+    expect.objectContaining({
+        username:'user4'
+    })
+]))
+})
 
 it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
     const response=await request(app)
     .post('/login')
     .send({
-        username:'user1',
+        username:'user4',
         password:'senha'
     })
     .expect("Content-Type",/json/)
     .expect(200)
- expect(response.body).toEqual({users})
+ expect(response.body).toEqual( expect.arrayContaining([
+    expect.objectContaining({
+        username:'user4'
+    })
+]))
 })
 
 it('POST /login,if the username isnt on the users array, then return apropiate error message',async()=>{
@@ -125,22 +144,6 @@ it('DELETE /game, delete especified game',async()=>{
     expect.objectContaining({
         title:'Divinity',
         id:'4'
-    })
-]))
-})
-
-it('POST /sigin,add the info on the users array',async()=>{
-    const response=await request(app)
-    .post('/signin')
-    .send({
-        username:'user4',
-        password:'senha'
-    })
-    .expect("Content-Type",/json/)
-    .expect(200)
- expect(response.body).toEqual( expect.arrayContaining([
-    expect.objectContaining({
-        username:'user4'
     })
 ]))
 })

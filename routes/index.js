@@ -48,9 +48,7 @@ router.put('/game',authenticateToken,(req,res,next)=>{
 })
 
 router.delete('/games',authenticateToken,(req,res,next)=>{
-console.log('whattttttttttttttttttttttt')
  let newArray=allGames.filter(game=>game.id!==req.query.id)
-
   res.json(newArray)
 })
 
@@ -60,6 +58,16 @@ router.get('/login',authenticateToken, function(req, res, next) {
   }
   res.json({user:true})
 });
+router.post('/signin', function(req, res, next) {
+
+  const username=req.body.username
+  bcrypt.hash(req.body.password,10,(err,hashedPassword)=>{
+    const newUser=({username,password:hashedPassword,id:'4'})
+    users.push(newUser)
+    res.json( users)
+  })
+  
+  });
 
 router.post('/login',(req,res,next)=>{
   try{
@@ -67,40 +75,35 @@ router.post('/login',(req,res,next)=>{
     const password=req.body.password
       let userExist=false;
       let passwordMatchs=false;
-    users.map(user=>{
-    if(user.username===req.body.username){
-    userExist=true
-    if(user.password===req.body.password){
-      passwordMatchs=true}}})
-    if(!userExist)
-        return  res.status(500),res.json({ errorMessage: 'Username doesnt exist!' })
-    else if(!passwordMatchs)
-      return  res.status(500),res.json({ errorMessage: 'Password doesnt match!' })
-    else{
-      let expire=3600  
-      const accessToken=jwt.sign({user:{username,password}},'secreteKey',{expiresIn:`${expire}s`})
-      req.header.token=accessToken
-      return res.json({ users });
+      console.log(users)
+  users.map(user=>{
+    if(user.username===req.body.username){ 
+        userExist=true
     }
+    if(userExist){
+       bcrypt.compare(password, user.password, (err, ress) => {
+        if(ress){
+          let expire=3600  
+          const accessToken=jwt.sign({user:{username,password}},'secreteKey',{expiresIn:`${expire}s`})
+          req.header.token=accessToken
+          return res.json( users ); }
+
+          else{
+            return  res.status(500),res.json({ errorMessage: 'Password doesnt match!' })
+          }
+      })  
+    }
+  })
+  console.log(userExist)
+  if(!userExist){
+     return  res.status(500),res.json({ errorMessage: 'Username doesnt exist!' })
+  }
   }
   catch(e){
     console.error(e.message)
     return  res.status(500),res.json({ errorMessage: 'Server Side Error!' })
   }
-
 })
-
-router.post('/signin', function(req, res, next) {
-
-const username=req.body.username
-bcrypt.hash(req.body.password,10,(err,hashedPassword)=>{
-  const newUser=({username,password:hashedPassword,id:'4'})
-  users.push(newUser)
-  res.json( users)
-  console.log(users)
-})
-
-});
 
 router.post('/logout', function(req, res, next) {
 req.header.token=undefined
