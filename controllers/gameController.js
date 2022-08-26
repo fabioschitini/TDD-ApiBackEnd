@@ -4,7 +4,6 @@ const allGames = [
     { id: '3', title: 'Blodborne' }
   ]; 
 
-
 exports.games_get=(req,res,next)=>{
     try{
         res.json( allGames)
