@@ -1,3 +1,6 @@
+var Games= require('../models/games');
+
+
 const allGames = [
     { id: '1', title: 'Elden Ring' }, 
     { id: '2', title: 'Dark Souls' }, 
@@ -27,10 +30,15 @@ exports.games_id_get=(req,res,next)=>{
       }
 }
 
-exports.games_post=(req,res,next)=>{
+exports.games_post=async (req,res,next)=>{
     try{
         const title=req.body.title
         const id=req.body.id
+  /*       let game=new Games({
+          title:req.body.title
+        }) */
+      /*   let newGames=await game.save()
+        console.log(newGames) */
         const newGame=({title,id})
         allGames.push(newGame)
         res.json( allGames)

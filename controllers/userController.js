@@ -1,5 +1,6 @@
 const bcrypt=require("bcryptjs")
 const jwt=require('jsonwebtoken')
+var Users= require('../models/users');
 
 
   const users=[
@@ -8,10 +9,18 @@ const jwt=require('jsonwebtoken')
     {id:'3',username:'user3',password:'senha'}
   ]
 
-exports.signin_post=(req,res,next)=>{
+exports.signin_post=async (req,res,next)=>{
     try{
         const username=req.body.username
         bcrypt.hash(req.body.password,10,(err,hashedPassword)=>{
+          let user=new Users({
+            username,
+            password:hashedPassword
+          })
+         user.save(err=>{
+            console.log(user,'userrrrrrrrr')
+          })
+          console.log(yep)
           const newUser=({username,password:hashedPassword,id:'4'})
           users.push(newUser)
           res.json( users)
