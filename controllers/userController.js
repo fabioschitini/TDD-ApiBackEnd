@@ -38,6 +38,9 @@ exports.login_post=async(req,res,next)=>{
    let correctPassword=await bcrypt.compare(req.body.password, user.password)  
    if(!correctPassword)
    return  res.status(401),res.json({ errorMessage: 'Password doesnt match!' })
+   let expire=3600  
+   const accessToken=jwt.sign({user},'secreteKey',{expiresIn:`${expire}s`})
+    req.header.token=accessToken
     return res.json( user)
       }
       catch(e){

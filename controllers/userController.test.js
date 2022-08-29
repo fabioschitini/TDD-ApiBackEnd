@@ -38,7 +38,7 @@ const users=[
     })
 )
 })
-/*
+
 it('POST /login,if the username isnt on the users array, then return apropiate error message',async()=>{
     const response=await request(app)
     .post('/login')
@@ -50,7 +50,6 @@ it('POST /login,if the username isnt on the users array, then return apropiate e
     .expect(401)
  expect(response.body).toEqual({errorMessage:"Username doesnt exist!"})
 })
-
 it('POST /login,if the password doenst match the username, then return apropiate error message',async()=>{
     const response=await request(app)
     .post('/login')
@@ -62,6 +61,7 @@ it('POST /login,if the password doenst match the username, then return apropiate
     .expect(401)
  expect(response.body).toEqual({errorMessage:"Password doesnt match!"})
 })
+
 
 it('GET /login, retunr the user info',async()=>{
     const response=await request(app)
@@ -90,21 +90,23 @@ it('GET /login,does not return the user info if you do  not have token',async()=
   
 })  
 
+
 it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
     const response=await request(app)
     .post('/login')
     .send({
-        username:'user4',
+        username:'user3',
         password:'senha'
     })
     .expect("Content-Type",/json/)
     .expect(200)
- expect(response.body).toEqual( expect.arrayContaining([
+ expect(response.body).toEqual( 
     expect.objectContaining({
-        username:'user4'
+        username:'user3'
     })
-]))
+)
 })
+/*
 
 it('DELETE /sigin,Delete the user',async()=>{
     const response=await request(app)
