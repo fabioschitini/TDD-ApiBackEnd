@@ -7,38 +7,38 @@ const users=[
     {id:'3',username:'user3',password:'senha'}
   ]
 
-it('POST /sigin,add the info on the users array',async()=>{
+/* it('POST /sigin,add the info on the users array',async()=>{
     const response=await request(app)
     .post('/signin')
-    .send({
-        username:'user1',
-        password:'senha'
-    })
-    .expect("Content-Type",/json/)
-    .expect(200)
- expect(response.body).toEqual( expect.arrayContaining([
-    expect.objectContaining({
-        username:'user1'
-    })
-]))
-}) 
-
-/* it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
-    const response=await request(app)
-    .post('/login')
     .send({
         username:'user4',
         password:'senha'
     })
     .expect("Content-Type",/json/)
     .expect(200)
- expect(response.body).toEqual( expect.arrayContaining([
+ expect(response.body).toEqual( 
     expect.objectContaining({
         username:'user4'
     })
-]))
-})
+)
+})  */
 
+ it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
+    const response=await request(app)
+    .post('/login')
+    .send({
+        username:'user3',
+        password:'senha'
+    })
+    .expect("Content-Type",/json/)
+    .expect(200)
+ expect(response.body).toEqual( 
+    expect.objectContaining({
+        username:'user3'
+    })
+)
+})
+/*
 it('POST /login,if the username isnt on the users array, then return apropiate error message',async()=>{
     const response=await request(app)
     .post('/login')

@@ -9,65 +9,42 @@ var Users= require('../models/users');
     {id:'3',username:'user3',password:'senha'}
   ]
 
-exports.signin_post=async (req,res,next)=>{
+exports.signin_post=(req,res,next)=>{
     try{
-        const username=req.body.username
-        bcrypt.hash(req.body.password,10,(err,hashedPassword)=>{
-          let user=new Users({
-            username,
-            password:hashedPassword
-          })
-         user.save(err=>{
-            console.log(user,'userrrrrrrrr')
-          })
-          console.log(yep)
-          const newUser=({username,password:hashedPassword,id:'4'})
-          users.push(newUser)
-          res.json( users)
+      const username=req.body.username
+      bcrypt.hash(req.body.password,10,async (err,hashedPassword)=>{
+        let user=new Users({
+          username,
+          password:hashedPassword
         })
+      await user.save()
+      console.log(user,'userrrrrrrrrrrrrrrrrrrr')
+       // const newUser=({username,password:hashedPassword,id:'4'})
+        //users.push(newUser)
+        res.json( user)
+      })
+    }
+    catch(e){
+      console.error(e.message)
+      return res.json({errorMessage:'Server Side Error!'})
+    }
+}
+
+exports.login_post=async(req,res,next)=>{
+   try{
+    let user=await Users.findOne({username:req.body.username})
+    if(!user)
+    return  res.status(401),res.json({ errorMessage: 'Username doesnt exist!' })
+   let correctPassword=await bcrypt.compare(req.body.password, user.password)  
+   if(!correctPassword)
+   return  res.status(401),res.json({ errorMessage: 'Password doesnt match!' })
+    return res.json( user)
       }
       catch(e){
         console.error(e.message)
-        return res.json({errorMessage:'Server Side Error!'})
-      }
-}
-
-exports.login_post=(req,res,next)=>{
-    try{
-        const username=req.body.username
-        const password=req.body.password
-          let userExist=false;
-      let user=users.map(user=>{
-        if(user.username===req.body.username){ 
-            userExist=true
-            return user
-        }
-      }).filter(user=>user!==undefined)[0]
-     
-      if(userExist){
-        console.log(user)
-        bcrypt.compare(password, user.password, (err, ress) => {
-         if(ress||user.password===req.body.password){
-           let expire=3600  
-           const accessToken=jwt.sign({user:{username,password}},'secreteKey',{expiresIn:`${expire}s`})
-           req.header.token=accessToken
-           return res.json( users )
-          }
-           else{
-             return  res.status(401),res.json({ errorMessage: 'Password doesnt match!' })
-           }
-       })  
-     }
-     else{
-      return  res.status(401),res.json({ errorMessage: 'Username doesnt exist!' })
-     }
-      }
-      catch(e){
-        //console.error(e.message)
         return  res.status(500),res.json({ errorMessage: 'Server Side Error!' })
       }
 }
-
 exports.login_get=(req,res,next)=>{
 
     try{
