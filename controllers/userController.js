@@ -19,8 +19,6 @@ exports.signin_post=(req,res,next)=>{
         })
       await user.save()
       console.log(user,'userrrrrrrrrrrrrrrrrrrr')
-       // const newUser=({username,password:hashedPassword,id:'4'})
-        //users.push(newUser)
         res.json( user)
       })
     }

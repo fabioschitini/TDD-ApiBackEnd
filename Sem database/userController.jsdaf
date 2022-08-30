@@ -8,14 +8,13 @@ const jwt=require('jsonwebtoken')
     {id:'3',username:'user3',password:'senha'}
   ]
 
-exports.signin_post=(req,res,next)=>{
+exports.signin_post=async (req,res,next)=>{
     try{
         const username=req.body.username
-        bcrypt.hash(req.body.password,10,(err,hashedPassword)=>{
-          const newUser=({username,password:hashedPassword,id:'4'})
+       const hashedPassword=await bcrypt.hash(req.body.password,10)
+         const newUser=({username,password:hashedPassword,id:'4'})
           users.push(newUser)
           res.json( users)
-        })
       }
       catch(e){
         console.error(e.message)
@@ -23,7 +22,7 @@ exports.signin_post=(req,res,next)=>{
       }
 }
 
-exports.login_post=(req,res,next)=>{
+exports.login_post=async (req,res,next)=>{
     try{
         const username=req.body.username
         const password=req.body.password
@@ -34,20 +33,15 @@ exports.login_post=(req,res,next)=>{
             return user
         }
       }).filter(user=>user!==undefined)[0]
-     
       if(userExist){
         console.log(user)
-        bcrypt.compare(password, user.password, (err, ress) => {
-         if(ress||user.password===req.body.password){
+        let correctPassword=await bcrypt.compare(req.body.password, user.password)  
+         if(!correctPassword&&password!==user.password)
+          return  res.status(401),res.json({ errorMessage: 'Password doesnt match!' })
            let expire=3600  
            const accessToken=jwt.sign({user:{username,password}},'secreteKey',{expiresIn:`${expire}s`})
            req.header.token=accessToken
            return res.json( users )
-          }
-           else{
-             return  res.status(401),res.json({ errorMessage: 'Password doesnt match!' })
-           }
-       })  
      }
      else{
       return  res.status(401),res.json({ errorMessage: 'Username doesnt exist!' })
