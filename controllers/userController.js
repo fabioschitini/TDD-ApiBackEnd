@@ -1,6 +1,7 @@
 const bcrypt=require("bcryptjs")
 const jwt=require('jsonwebtoken')
 var Users= require('../models/users');
+const { post } = require("../routes");
 
 
   const users=[
@@ -68,10 +69,12 @@ exports.logout_post=(req,res,next)=>{
       }
 }
 
-exports.signin_delete=(req,res,next)=>{
+exports.signin_delete=async (req,res,next)=>{
   try{
-    let newArray=users.filter(user=>user.id!==req.query.id)
-    res.json(newArray)
+    await Users.findByIdAndDelete(req.body.params)
+    const users=await Users.find({})
+    //let newArray=users.filter(user=>user.id!==req.query.id)
+    res.json(users)
   }
   catch(e){
     console.error(e.message)

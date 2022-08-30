@@ -110,14 +110,12 @@ it('POST /login,if the correct username and password is put, then return user ar
 
 it('DELETE /sigin,Delete the user',async()=>{
     const response=await request(app)
-    .delete('/signin')
-    .query({ id: '4' })
+    .delete('/signin/3')
     .expect("Content-Type",/json/)
     .expect(200)
-    expect(response.body).not.toEqual( expect.arrayContaining([
+    expect(response.body).not.toEqual(
         expect.objectContaining({
-            username:'user4',
-            id:'4'
+            username:'user3',
         })
-    ]))
+  )
 })  */

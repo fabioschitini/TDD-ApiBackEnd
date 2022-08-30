@@ -7,7 +7,10 @@ const allGames = [
     { id: '3', title: 'Blodborne' }
   ];
 
-/* it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
+/* 
+
+
+it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
     const response=await request(app)
     .post('/login')
     .send({
@@ -16,12 +19,28 @@ const allGames = [
     })
     .expect("Content-Type",/json/)
     .expect(200)
- expect(response.body).toEqual( expect.arrayContaining([
+ expect(response.body).toEqual( 
     expect.objectContaining({
         username:'user3'
     })
-]))
-}) 
+)
+})
+
+it('POST /games,add new game object on the allGames array,then return array with object with all games',async()=>{
+    const response=await request(app)
+    .post('/games')
+    .send({
+        title:'Divinity',
+        id:4
+    })
+    .expect("Content-Type",/json/)
+    .expect(200)
+ expect(response.body).toEqual(
+        expect.objectContaining({
+            title:'Divinity'
+        })
+ )
+})
 
 it('GET /games return array with object with all games',async()=>{
     const response=await request(app)
@@ -48,23 +67,7 @@ it('GET /games/id return game object when give especific id',async()=>{
  
 })
 
-it('POST /games,add new game object on the allGames array,then return array with object with all games',async()=>{
-    const response=await request(app)
-    .post('/games')
-    .send({
-        title:'Divinity',
-        id:4
-    })
-    .expect("Content-Type",/json/)
-    .expect(200)
- expect(response.body).toEqual(
-    expect.arrayContaining([
-        expect.objectContaining({
-            title:'Divinity'
-        })
-    ])
- )
-})
+
 
 it('PUT /game, update the details of the game',async()=>{
     const response=await request(app)

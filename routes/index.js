@@ -27,7 +27,7 @@ router.get('/login',authenticateToken,userController.login_get);
 
 router.post('/logout',userController.logout_post);
 
-router.delete('/signin',authenticateToken,userController.signin_delete)
+router.delete('/signin/:id',authenticateToken,userController.signin_delete)
 
 function authenticateToken(req,res,next){
    let token;
