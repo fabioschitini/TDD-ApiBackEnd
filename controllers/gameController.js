@@ -9,11 +9,12 @@ const allGames = [
 
 exports.games_get=async(req,res,next)=>{
     try{
-      const allGames=await Games.find({})
+      const allGames=await Games.find()
+      //console.log(allGames)
         res.json( allGames)
        }
       catch(e){
-        console.error(e.message)
+       // console.error(e.message)
         return res.json({errorMessage:'Server Side Error!'})
       } 
 }
@@ -34,19 +35,10 @@ exports.games_id_get=async (req,res,next)=>{
 exports.games_post=async (req,res,next)=>{
     try{
         const title=req.body.title
-        const id=req.body.id
         let game=new Games({
-          title,
-          id
+          title
         })
       await game.save()
-  /*       let game=new Games({
-          title:req.body.title
-        }) */
-      /*   let newGames=await game.save()
-        console.log(newGames) */
-       // const newGame=({title,id})
-        //allGames.push(newGame)
         res.json( game)
       }
       catch(e){
@@ -59,14 +51,11 @@ exports.games_put=async (req,res,next)=>{
     try{
         let uptadedGame=new Games({
           title:req.body.title,
-          id:req.params.id
+          _id:req.params.id
         })
-       const result=await Games.findByIdAndUpdate(req.params.id,uptadedGame,{})
-  /*      let allGamesNew= allGames.map(game=>{
-          if(game.id==req.params.id){
-          return uptadedGame}
-          return game}) */
-        res.json(result)
+       const yep=await Games.findByIdAndUpdate(req.params.id,uptadedGame,{})
+        const games=await Games.find({})
+        res.json(games)
       }
       catch(e){
         console.error(e.message)
@@ -74,9 +63,9 @@ exports.games_put=async (req,res,next)=>{
       }
 }
 
-exports.games_delete=(req,res,next)=>{
+exports.games_delete=async(req,res,next)=>{
     try{
-      await Games.findByIdAndDelete(req.body.params)
+      await Games.findByIdAndDelete(req.params.id)
       const games=await Games.find({})
        // let newArray=allGames.filter(game=>game.id!=req.params.id)
         res.json(games)

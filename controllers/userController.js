@@ -19,12 +19,11 @@ exports.signin_post=(req,res,next)=>{
           password:hashedPassword
         })
       await user.save()
-      console.log(user,'userrrrrrrrrrrrrrrrrrrr')
         res.json( user)
       })
     }
     catch(e){
-      console.error(e.message)
+      console.error(e.message) 
       return res.json({errorMessage:'Server Side Error!'})
     }
 }
@@ -47,9 +46,11 @@ exports.login_post=async(req,res,next)=>{
         return  res.status(500),res.json({ errorMessage: 'Server Side Error!' })
       }
 }
-exports.login_get=(req,res,next)=>{
+exports.login_get=async (req,res,next)=>{
 
-    try{
+    try{  
+      const u=await Users.find({})
+      console.log(u,'usersssssssssssss')
         res.json({user:true})
       }
       catch(e){
@@ -68,11 +69,12 @@ exports.logout_post=(req,res,next)=>{
         return res.json({errorMessage:'Server Side Error!'})
       }
 }
-
+ 
 exports.signin_delete=async (req,res,next)=>{
   try{
-    await Users.findByIdAndDelete(req.body.params)
+    await Users.findByIdAndDelete(req.params.id)
     const users=await Users.find({})
+    console.log(users)
     //let newArray=users.filter(user=>user.id!==req.query.id)
     res.json(users)
   }

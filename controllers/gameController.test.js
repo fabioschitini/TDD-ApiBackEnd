@@ -1,16 +1,17 @@
 const request=require('supertest')
 const app=require('../app') 
+var Games= require('../models/games');
 
 const allGames = [
-    { id: '1', title: 'Elden Ring' }, 
-    { id: '2', title: 'Dark Souls' }, 
-    { id: '3', title: 'Blodborne' }
+    { id: '1', title: 'Blodbornes' }, 
+    { id: '2', title: 'Blodbornes' }, 
+    { id: '3', title: 'Blodbornes' }
   ];
 
-/* 
 
 
-it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
+
+  it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
     const response=await request(app)
     .post('/login')
     .send({
@@ -26,21 +27,22 @@ it('POST /login,if the correct username and password is put, then return user ar
 )
 })
 
-it('POST /games,add new game object on the allGames array,then return array with object with all games',async()=>{
+
+ it('POST /games,add new game object on the allGames array,then return array with object with all games',async()=>{
     const response=await request(app)
     .post('/games')
     .send({
-        title:'Divinity',
-        id:4
+        title:'Blodborne'
     })
     .expect("Content-Type",/json/)
     .expect(200)
  expect(response.body).toEqual(
-        expect.objectContaining({
-            title:'Divinity'
+        expect.objectContaining({ 
+            title:'Blodborne'
         })
  )
-})
+}) 
+
 
 it('GET /games return array with object with all games',async()=>{
     const response=await request(app)
@@ -58,47 +60,65 @@ it('GET /games return array with object with all games',async()=>{
 })
 
 it('GET /games/id return game object when give especific id',async()=>{
+    const game=await Games.find({title:'Blodborne'})
+    gameId=game[0]._id
     const response=await request(app)
-    .get('/games/1')
-    .query({ id: '1' })
+    .get(`/games/${gameId}`)
     .expect("Content-Type",/json/)
     .expect(200)
-    expect(response.body).toEqual({ id: '1', title: 'Elden Ring' })
- 
+    expect(response.body).toEqual(expect.objectContaining({
+        title:'Blodborne'
+    }))
 })
 
 
 
 it('PUT /game, update the details of the game',async()=>{
+      const game=await Games.find({title:'Blodborne'})
+    gameId=game[0]._id
+
     const response=await request(app)
-    .put('/game/4')
-    .send({
-        title:'Divinity',
-        id:'4'
-    })
+    .put(`/game/${gameId}`)
+    .send({title:'Blodbornes'})
     .expect("Content-Type",/json/)
     .expect(200)
  expect(response.body).toEqual( expect.arrayContaining([
     expect.objectContaining({
-        title:'Divinity',
-        id:'4'
+        title:'Blodbornes'
     })
+]))
+})
+
+it('PUT /game, update the details of the game',async()=>{
+    const game=await Games.find({title:'Blodbornes'})
+  gameId=game[0]._id
+
+  const response=await request(app)
+  .put(`/game/${gameId}`)
+  .send({title:'Blodborne'})
+  .expect("Content-Type",/json/)
+  .expect(200)
+expect(response.body).toEqual( expect.arrayContaining([
+  expect.objectContaining({
+      title:'Blodborne'
+  })
 ]))
 })
 
 it('DELETE /game, delete especified game',async()=>{
+    const game=await Games.find({title:'Blodborne'})
+    gameId=game[0]._id
     const response=await request(app)
-    .delete('/games/4')
+    .delete(`/games/${gameId}`)
     .expect("Content-Type",/json/)
     .expect(200)
  expect(response.body).not.toEqual( expect.arrayContaining([
     expect.objectContaining({
-        title:'Divinity',
-        id:4
+        title:'Blodborne'
     })
 ]))
 })
-
+/* 
 it('POST /logout,destroying the token and loggin out',async()=>{
     const response=await request(app)
     .post('/logout')
@@ -113,7 +133,7 @@ it('POST /games,you cant add games because you do not have the permission to do 
     .post('/games')
     .set({token:true})
     .send({
-        title:'Divinity',
+        title:'Blodbornes',
         id:4
     })
     .expect("Content-Type",/json/)

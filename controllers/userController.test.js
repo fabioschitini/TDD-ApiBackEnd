@@ -1,13 +1,14 @@
 const request=require('supertest')
 const app=require('../app') 
+var Users= require('../models/users');
 
 const users=[
     {id:'1',username:'user1',password:'senha'},
-    {id:'2',username:'user2',password:'senha'},
-    {id:'3',username:'user3',password:'senha'}
+    {id:'2',username:'user4',password:'senha'},
+    {id:'3',username:'user4',password:'senha'}
   ]
 
-/* it('POST /sigin,add the info on the users array',async()=>{
+it('POST /sigin,add the info on the users array',async()=>{
     const response=await request(app)
     .post('/signin')
     .send({
@@ -21,20 +22,20 @@ const users=[
         username:'user4'
     })
 )
-})  */
+}) 
 
  it('POST /login,if the correct username and password is put, then return user arrays',async()=>{
     const response=await request(app)
     .post('/login')
     .send({
-        username:'user3',
+        username:'user4',
         password:'senha'
     })
     .expect("Content-Type",/json/)
     .expect(200)
  expect(response.body).toEqual( 
     expect.objectContaining({
-        username:'user3'
+        username:'user4'
     })
 )
 })
@@ -95,27 +96,31 @@ it('POST /login,if the correct username and password is put, then return user ar
     const response=await request(app)
     .post('/login')
     .send({
-        username:'user3',
+        username:'user4',
         password:'senha'
     })
     .expect("Content-Type",/json/)
     .expect(200)
  expect(response.body).toEqual( 
     expect.objectContaining({
-        username:'user3'
+        username:'user4'
     })
 )
 })
-/*
+
 
 it('DELETE /sigin,Delete the user',async()=>{
+    const user=await Users.find({username:'user4'})
+    const userId=user[0]._id
+   // console.log(user[0]._id,'idddddddddddddddddddddd')
     const response=await request(app)
-    .delete('/signin/3')
+    .delete(`/signin/${userId}`)
     .expect("Content-Type",/json/)
     .expect(200)
-    expect(response.body).not.toEqual(
+    expect(response.body).not.toEqual(expect.arrayContaining([
         expect.objectContaining({
-            username:'user3',
+            username:'user4',
         })
+    ])
   )
-})  */
+})   
