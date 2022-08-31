@@ -118,7 +118,6 @@ it('DELETE /game, delete especified game',async()=>{
     })
 ]))
 })
-/* 
 it('POST /logout,destroying the token and loggin out',async()=>{
     const response=await request(app)
     .post('/logout')
@@ -133,10 +132,9 @@ it('POST /games,you cant add games because you do not have the permission to do 
     .post('/games')
     .set({token:true})
     .send({
-        title:'Blodbornes',
-        id:4
+        title:'Blodborne',
     })
     .expect("Content-Type",/json/)
     .expect(401)
  expect(response.body).toEqual({user:undefined})
-}) */
+}) 
