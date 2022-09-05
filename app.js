@@ -10,10 +10,22 @@ var usersRouter = require('./routes/users');
 const session = require("express-session");
 
 var app = express();
+app.enable('trust proxy')
+
+
+var mongoose = require('mongoose');
+const dev_db_url='mongodb+srv://schitini:Fabiolindo1@node-projects.zykqj.mongodb.net/TDD-API?retryWrites=true&w=majority'
+var mongoDB =  dev_db_url;
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.use(cors({credentials: true, origin: ['https://fabioschitini.github.io','http://localhost:3000']}))
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -34,15 +46,7 @@ app.use(session({
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-var mongoose = require('mongoose');
-const dev_db_url='mongodb+srv://schitini:Fabiolindo1@node-projects.zykqj.mongodb.net/TDD-API?retryWrites=true&w=majority'
-var mongoDB =  dev_db_url;
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.Promise = global.Promise;
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.use(cors({credentials: true, origin: ['https://fabioschitini.github.io','http://localhost:3000']}))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
