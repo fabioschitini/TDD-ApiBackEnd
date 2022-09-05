@@ -25,7 +25,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(cors({credentials: true, origin: ['https://fabioschitini.github.io','http://localhost:3000']}))
+app.use(cors({credentials: true, origin: ['https://fabioschitini.github.io','http://localhost']}))
 
 app.use(logger('dev'));
 app.use(express.json());
