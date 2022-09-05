@@ -8,6 +8,9 @@ const gamesController=require('../controllers/gameController')
 
 
 /* GET home page. */
+router.get('/',(req,res,next)=>{
+  res.json('Welcome to my TDD API')
+});
 
 router.post('/signin',userController.signin_post);
   
