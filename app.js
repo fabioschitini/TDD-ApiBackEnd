@@ -30,7 +30,7 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-
+app.use(cors({credentials: true, origin: ['https://fabioschitini.github.io','http://localhost:3000']}))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
