@@ -19,7 +19,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(cors({credentials: true, origin:true,
   allowedHeaders: ['Content-Type', 'Authorization'],
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  methods: ['DELETE']
 
 }))
 app.use(logger('dev'));
