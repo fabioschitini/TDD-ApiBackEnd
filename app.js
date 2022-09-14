@@ -17,7 +17,9 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.use(cors({credentials: true, origin:true}))
+app.use(cors({credentials: true, origin:true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
