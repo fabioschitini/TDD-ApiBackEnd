@@ -24,7 +24,7 @@ router.post('/games',authenticateToken, gamesController.games_post);
 
 router.put('/game/:id',authenticateToken,gamesController.games_put)
 
-router.delete('/games/:id',authenticateToken,gamesController.games_delete)
+router.post('/games/delete/:id',authenticateToken,gamesController.games_delete)
 
 router.get('/login',authenticateToken,userController.login_get);
 

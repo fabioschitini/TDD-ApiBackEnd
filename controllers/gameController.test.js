@@ -109,7 +109,7 @@ it('DELETE /game, delete especified game',async()=>{
     const game=await Games.find({title:'Blodborne'})
     gameId=game[0]._id
     const response=await request(app)
-    .delete(`/games/${gameId}`)
+    .post(`/games/delete/${gameId}`)
     .expect("Content-Type",/json/)
     .expect(200)
  expect(response.body).not.toEqual( expect.arrayContaining([
