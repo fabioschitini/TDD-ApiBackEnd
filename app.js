@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
+/* app.use(session({
   secret: 'street',
   resave: true,
   saveUninitialized: true,
@@ -41,9 +41,9 @@ app.use(session({
       sameSite:'none',
       secure:true
   },
-}));
+})); */
 
-app.use(flash())
+//app.use(flash())
 
 
 app.use('/', indexRouter);
